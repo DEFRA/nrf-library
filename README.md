@@ -21,4 +21,5 @@ import something from '@defra/nrf-library'
 ```
 
 See also
+
 - [Releasing a new version of nrf-library](docs/release-version.md)

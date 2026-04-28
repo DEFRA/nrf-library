@@ -15,7 +15,15 @@
     "test": "echo \"No tests yet\" && exit 0",
     "release": "npm version patch && git push --follow-tags",
     "release:minor": "npm version minor && git push --follow-tags",
-    "release:major": "npm version major && git push --follow-tags"
+    "release:major": "npm version major && git push --follow-tags",
+    "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
+    "format": "prettier --write --no-error-on-unmatched-pattern \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js}\"",
+    "format:check": "prettier --check --no-error-on-unmatched-pattern \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js}\"",
+    "lint": "npm run lint:js",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
+    "git:pre-commit-hook": "npm audit --audit-level=high && npm run format:check && npm run lint",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -28,5 +36,11 @@
   "license": "OGL-UK-3.0",
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "husky": "^9.1.7",
+    "neostandard": "^0.13.0",
+    "prettier": "^3.8.3"
   }
 }
