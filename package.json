@@ -1,0 +1,32 @@
+{
+  "name": "@defra/nrf-library",
+  "version": "0.1.0",
+  "description": "Shared library for NRF projects.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"No tests yet\" && exit 0",
+    "release": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DEFRA/nrf-library.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DEFRA/nrf-library/issues"
+  },
+  "homepage": "https://github.com/DEFRA/nrf-library#readme",
+  "license": "OGL-UK-3.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
