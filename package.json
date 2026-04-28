@@ -9,7 +9,8 @@
   },
   "files": [
     "index.js",
-    "src"
+    "README.md",
+    ".ai"
   ],
   "scripts": {
     "test": "echo \"No tests yet\" && exit 0",
