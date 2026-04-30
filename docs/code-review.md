@@ -12,7 +12,7 @@ Invoke with an @-mention:
 @"code-reviewer (agent)" review my changes
 ```
 
-Or ask Claude naturally:
+Or ask naturally:
 
 ```
 Use the code-reviewer agent to review my changes
