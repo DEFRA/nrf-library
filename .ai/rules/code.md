@@ -1,3 +1,9 @@
+---
+paths:
+  - '**/*.js'
+  - '!**/*.test.js'
+---
+
 # Coding patterns
 
 ## Functions
@@ -33,3 +39,7 @@
 - If a service interaction is not blocking the user experience, consider adding a retry mechanism
 - Use a single HTTP client if possible (wreck?) and wrap it in a helper so eg tracing header is always sent
 - Base paths for other services should come from config as a separate env var (eg avoid getImpactAssessorUrl)
+
+## Security
+
+- Don't expose any secrets or API keys; they should come from env vars which are exposed to the app via the config.js file
