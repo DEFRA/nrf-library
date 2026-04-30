@@ -22,6 +22,11 @@ paths:
 - no need to reset or clear mocks within test files as `mockReset` is set globally for vitest
 - the test suite spins up a real redis container so tests **don't** have to mock functions that wrap it eg session cache
 
+## Testing page forms
+
+- When testing validation errors, use `submitForm` to POST invalid data, then pass the returned `cookie` directly to `loadPage` — `submitForm` already extracts the session cookie from `set-cookie` headers. Assert on `response.statusCode` (303) and `response.headers.location` before loading the redirected page.
+- When testing that a previous selection is persisted, submit valid data with `submitForm` and pass the returned `cookie` to a subsequent `loadPage` call.
+
 ## Testing DOM / HTML
 
 - DOM testing library is used for querying the DOM, prefer that to native querySelector as it enables finding elements by ARIA role or associated label so builds in accessibility checks, for free
