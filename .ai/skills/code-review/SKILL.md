@@ -7,12 +7,14 @@ run_as_subagent: true
 ## Parameters
 
 1. **Files to review** (optional) — specific file paths to review; defaults to all files changed on the current branch vs `main`
+2. **GitHub PR URL** (optional) — if provided, use `gh pr diff <url>` to get the changed files instead of git diff
 
 ## Steps
 
 1. Read `.ai/rules/index.md` and all files it links to, to load the project coding standards.
 2. Identify files to review:
-   - If files were passed as a parameter, use those.
+   - If a GitHub PR URL was provided, run `gh pr diff <url> --name-only` to get the changed files, and `gh pr diff <url>` to read the diff content.
+   - Otherwise, if files were passed as a parameter, use those.
    - Otherwise run `git diff main...HEAD --name-only` to list all files changed on the current branch vs `main`.
    - If that returns no files, fall back to `git diff --name-only HEAD` (unstaged changes) and `git diff --name-only --cached` (staged changes), and combine the results.
    - If there are still no files, report that there is nothing to review and stop.
@@ -39,6 +41,10 @@ For each file with findings:
 If a file has no findings, omit it from the report.
 
 End with a one-line summary: total files reviewed, total blockers, total suggestions.
+
+## Posting to GitHub
+
+If a GitHub PR URL was provided, after outputting the report ask the user whether they want to post it as a comment on the PR. If they confirm, post the report using `gh pr comment <url> --body "<report>"`.
 
 ## Subagent behaviour
 
