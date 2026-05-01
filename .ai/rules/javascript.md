@@ -4,7 +4,7 @@ paths:
   - '!**/*.test.js'
 ---
 
-# Coding patterns
+# Javascript coding guidelines
 
 ## Functions
 
@@ -12,34 +12,42 @@ paths:
 - If there are multiple function params, use an object param instead
 - For functions that accept params that are structured objects, add JSDoc annotations to help the agent. No need to add JSDoc everywhere as for params with primitive types it can infer.
 
-## Config
-
-- If a env var will vary between envs, use config to set it
-- For any config vars introduced that don’t have a default value in config.js, add to .env.example
-
 ## Functional / classes
 
 - Favour functional over classes
 
-## Observability
+## Server-side code
 
-### Tracing
+### Config
+
+- If a env var will vary between envs, use config to set it
+- For any config vars introduced that don’t have a default value in config.js, add to .env.example
+
+### Observability
+
+#### Tracing
 
 - For any inter-service call or message, include the tracing header (example in `src/server/common/services/nrf-backend.js`)
 
-### Logging
+#### Logging
 
 - call logger.error with an error instance as the first param
 - Call logger.info with an object as the first param
 - prefer using createLogger in modules rather than passing the request.logger in as a function parameter
 
-## Services pattern
+### Services pattern
 
 - Where you need to interact with other services eg APIs, wrap the code in a service (see examples in `src/common/services`
 - If a service interaction is not blocking the user experience, consider adding a retry mechanism
 - Use a single HTTP client if possible (wreck?) and wrap it in a helper so eg tracing header is always sent
 - Base paths for other services should come from config as a separate env var (eg avoid getImpactAssessorUrl)
 
-## Security
+### Security
 
 - Don't expose any secrets or API keys; they should come from env vars which are exposed to the app via the config.js file
+
+## Client-side Javascript (run in the browser)
+
+### Use CSS for style
+
+If possible, avoid applying style attributes directly to an element using javascript; instead add a CSS class and store the style properties in a CSS file.
