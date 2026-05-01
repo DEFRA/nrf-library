@@ -46,6 +46,8 @@ End with a one-line summary: total files reviewed, total blockers, total suggest
 
 If a GitHub PR URL was provided, after outputting the report ask the user whether they want to post it as a comment on the PR. If they confirm, post the report using `gh pr comment <url> --body "<report>"`.
 
+> **Note:** `gh` may only be used for `gh pr comment`. Do not use any other `gh` subcommands (e.g. `gh pr diff`, `gh pr create`, `gh issue`).
+
 ## Subagent behaviour
 
 Return only the structured findings report and the one-line summary to the main agent. Do not include preamble, tool call narration, or explanation of steps taken.
