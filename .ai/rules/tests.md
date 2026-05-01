@@ -1,3 +1,8 @@
+---
+paths:
+  - '**/*.test.js'
+---
+
 # Tests
 
 ## Types of test
@@ -16,6 +21,11 @@
 - for mocking responses from service calls out to other APIs, prefer Mock Service Worker rather than mocking fetch or HTTP clients like Wreck ([example](../../src/server/quote/check-your-answers/controller-post.test.js))
 - no need to reset or clear mocks within test files as `mockReset` is set globally for vitest
 - the test suite spins up a real redis container so tests **don't** have to mock functions that wrap it eg session cache
+
+## Testing page forms
+
+- When testing validation errors, use `submitForm` to POST invalid data, then pass the returned `cookie` directly to `loadPage` — `submitForm` already extracts the session cookie from `set-cookie` headers. Assert on `response.statusCode` (303) and `response.headers.location` before loading the redirected page.
+- When testing that a previous selection is persisted, submit valid data with `submitForm` and pass the returned `cookie` to a subsequent `loadPage` call.
 
 ## Testing DOM / HTML
 
