@@ -7,8 +7,8 @@ paths:
 
 ## Types of test
 
-- **Unit** - the lowest level, prefer this for edge cases, there should be many more of these than acceptance tests as they're faster and easier to debug. Filename is \*.test.js
-- **Acceptance** - should test an entire page or endpoint by sending a request to the running server. Filename is \*.acceptance.test.js
+- **Unit** - the lowest level, prefer this for edge cases, there should be many more of these than acceptance tests as they're faster and easier to debug.
+- **Acceptance** - Acceptance tests should use the inputs and outputs that a user would generate and expect eg send a real request and parse the returned page DOM. See any page.test.js in nrf-frontend for an example. Or for a backend API, send a request and assert on the response.
 - There are also **journey** tests but those are in a different repo (nrf-journey-tests) and should be reserved for very few 'happy path' cases, or functionality that's too complext to test using unit or acceptance tests.
 
 ## Location
@@ -34,6 +34,7 @@ paths:
 ## Test readability
 
 - Keep fixtures and test utils out of tests and place in eg `src/test-utils` for re-use and to make the test file itself shorter and easier to read.
+- The test title should be in readable english and avoid too many implementation details
 
 ## Fixtures
 

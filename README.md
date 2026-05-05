@@ -7,4 +7,5 @@ Shared library for NRF projects, installable directly from GitHub.
 
 AI agent tools
 
-- [Code review](./docs/code-review.md)
+- [Code reviewer](docs/code-reviewer.md)
+- [Browser tester](docs/browser-test.md)
