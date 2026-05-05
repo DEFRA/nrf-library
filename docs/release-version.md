@@ -10,12 +10,14 @@ npm run release:minor    # minor: 0.1.0 → 0.2.0  (new, backwards-compatible fe
 npm run release:major    # major: 0.1.0 → 1.0.0  (breaking changes)
 ```
 
-Each command will:
+Each command bumps the `version` field in `package.json` (and `package-lock.json` if present) and leaves the change unstaged. Commit it yourself, e.g.:
 
-1. Bump the `version` field in `package.json`
-2. Create a commit (e.g. `v0.1.1`)
+```bash
+git commit -am "v0.3.1"
+git push
+```
 
-Then push the branch, open a PR, and merge it. Once the merge lands on `main`, the workflow reads the new version from `package.json` and creates+pushes the matching tag (e.g. `v0.1.1`). PRs that don't change `package.json` (e.g. docs-only) are skipped.
+Then open a PR and merge it. Once the merge lands on `main`, the workflow reads the new version from `package.json` and creates+pushes the matching tag (e.g. `v0.3.1`). PRs that don't change `package.json` (e.g. docs-only) are skipped.
 
 Consumers can then pin to the new tag:
 
