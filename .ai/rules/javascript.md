@@ -47,6 +47,10 @@ paths:
 - Don't expose any secrets or API keys; they should come from env vars which are exposed to the app via the config.js file
 - validate / sanitize user inputs
 
+### Validation
+
+- if validating any object or response payload, use Joi rather than custom validation
+
 ## Client-side Javascript (run in the browser)
 
 Server-side code should be used where possible; client-side code should be kept to an absolute minimum, to meet the requirement for progressive enhancement.
