@@ -14,9 +14,9 @@
   ],
   "scripts": {
     "test": "echo \"No tests yet\" && exit 0",
-    "release": "npm version patch && git push --follow-tags",
-    "release:minor": "npm version minor && git push --follow-tags",
-    "release:major": "npm version major && git push --follow-tags",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
     "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
     "format": "prettier --write --no-error-on-unmatched-pattern \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js}\"",
     "format:check": "prettier --check --no-error-on-unmatched-pattern \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js}\"",
