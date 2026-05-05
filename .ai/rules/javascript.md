@@ -10,7 +10,7 @@ paths:
 
 - Use short, single-purpose functions. Any over 75 lines will be failed by SonarQube, but aim to make them shorter.
 - If there are multiple function params, use an object param instead
-- For functions that accept params that are structured objects, add JSDoc annotations to help the agent. No need to add JSDoc everywhere as for params with primitive types it can infer.
+- For functions that accept params that are structured objects, add JSDoc annotations — this applies to all functions, including module-private helpers, not just exported ones. No need to add JSDoc for params with primitive types as those can be inferred.
 
 ## Functional / classes
 
@@ -31,8 +31,8 @@ paths:
 
 #### Logging
 
-- call logger.error with an error instance as the first param
-- Call logger.info with an object as the first param
+- call `logger.error(error, message)` — always pass the error instance as the first param, message string second
+- call `logger.info({ ...context }, message)` — always pass a context object as the first param, never a plain string; include relevant identifiers (eg IDs, template names) in the context object
 - prefer using createLogger in modules rather than passing the request.logger in as a function parameter
 
 ### Services pattern

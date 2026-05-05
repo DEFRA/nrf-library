@@ -5,13 +5,8 @@
   "type": "module",
   "main": "index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./src/index.js"
   },
-  "files": [
-    "index.js",
-    "README.md",
-    ".ai"
-  ],
   "scripts": {
     "test": "echo \"No tests yet\" && exit 0",
     "release:patch": "npm version patch --no-git-tag-version",
