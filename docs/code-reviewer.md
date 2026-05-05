@@ -1,4 +1,4 @@
-# Code review
+# Code reviewer
 
 Reviews changed files against project coding standards defined in `.ai/rules/`.
 

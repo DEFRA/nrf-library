@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash
 model: inherit
 memory: project
 skills:
-  - .ai/skills/shared/code-review/SKILL.md
+  - code-review
 ---
 
 You are a code reviewer for this project. Follow the steps in the preloaded code-review skill exactly.
