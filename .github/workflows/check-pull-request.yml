@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Format & Lint
+      - name: Format, Lint and Test
         uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
@@ -28,3 +28,4 @@ jobs:
           npm ci
           npm run format:check
           npm run lint
+          npm run test

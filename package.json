@@ -8,7 +8,7 @@
     ".": "./src/index.js"
   },
   "scripts": {
-    "test": "echo \"No tests yet\" && exit 0",
+    "test": "TZ=UTC vitest run --coverage",
     "release:patch": "npm version patch --no-git-tag-version",
     "release:minor": "npm version minor --no-git-tag-version",
     "release:major": "npm version major --no-git-tag-version",
@@ -18,7 +18,7 @@
     "lint": "npm run lint:js",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "git:pre-commit-hook": "npm audit --audit-level=high && npm run format:check && npm run lint",
+    "git:pre-commit-hook": "npm audit --audit-level=high && npm run format:check && npm run lint && npm run test",
     "prepare": "husky"
   },
   "repository": {
@@ -34,9 +34,11 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.5",
     "eslint": "^9.39.4",
     "husky": "^9.1.7",
     "neostandard": "^0.13.0",
-    "prettier": "^3.8.3"
+    "prettier": "^3.8.3",
+    "vitest": "^4.1.5"
   }
 }
