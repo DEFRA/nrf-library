@@ -22,6 +22,7 @@ paths:
 
 - If a env var will vary between envs, use config to set it
 - For any config vars introduced that don’t have a default value in config.js, add to .env.example
+- Read config inside functions, not at module scope — module-level reads are cached on first import, so the value is frozen for the lifetime of the process. This makes it impossible to test different config values without `vi.resetModules()` and dynamic imports, which adds significant test complexity
 
 ### Observability
 
@@ -46,6 +47,7 @@ paths:
 
 - Don't expose any secrets or API keys; they should come from env vars which are exposed to the app via the config.js file
 - validate / sanitize user inputs
+- Nunjucks `autoescape: true` HTML-encodes output but does NOT prevent JS injection inside `<script>` blocks — any `{{ variable }}` rendered inside a JS string literal must either be validated against a strict allowlist (e.g. `/^GTM-[A-Z0-9]+$/`) or use the `| dump` filter to JSON-encode it safely
 
 ### Validation
 
