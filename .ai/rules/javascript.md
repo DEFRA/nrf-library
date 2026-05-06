@@ -10,7 +10,7 @@ paths:
 
 - Use short, single-purpose functions. Any over 75 lines will be failed by SonarQube, but aim to make them shorter.
 - If there are multiple function params, use an object param instead
-- For functions that accept params that are structured objects, add JSDoc annotations to help the agent. No need to add JSDoc everywhere as for params with primitive types it can infer.
+- For functions that accept params that are structured objects, add JSDoc annotations — this applies to all functions, including module-private helpers, not just exported ones. No need to add JSDoc for params with primitive types as those can be inferred.
 
 ## Functional / classes
 
@@ -22,6 +22,7 @@ paths:
 
 - If a env var will vary between envs, use config to set it
 - For any config vars introduced that don’t have a default value in config.js, add to .env.example
+- Read config inside functions, not at module scope — module-level reads are cached on first import, so the value is frozen for the lifetime of the process. This makes it impossible to test different config values without `vi.resetModules()` and dynamic imports, which adds significant test complexity
 
 ### Observability
 
@@ -31,8 +32,8 @@ paths:
 
 #### Logging
 
-- call logger.error with an error instance as the first param
-- Call logger.info with an object as the first param
+- call `logger.error(error, message)` — always pass the error instance as the first param, message string second
+- call `logger.info({ ...context }, message)` — always pass a context object as the first param, never a plain string; include relevant identifiers (eg IDs, template names) in the context object
 - prefer using createLogger in modules rather than passing the request.logger in as a function parameter
 
 ### Services pattern
@@ -46,6 +47,7 @@ paths:
 
 - Don't expose any secrets or API keys; they should come from env vars which are exposed to the app via the config.js file
 - validate / sanitize user inputs
+- Nunjucks `autoescape: true` HTML-encodes output but does NOT prevent JS injection inside `<script>` blocks — any `{{ variable }}` rendered inside a JS string literal must either be validated against a strict allowlist (e.g. `/^GTM-[A-Z0-9]+$/`) or use the `| dump` filter to JSON-encode it safely
 
 ### Validation
 

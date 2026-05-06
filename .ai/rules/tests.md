@@ -17,7 +17,7 @@ paths:
 
 ## Mocking
 
-- avoid excessive mocking of functions used by the function-under-test unless there's a good reason (eg the function you want to mock wraps a browser API that is difficult to mock)
+- minimise mocking: only mock at the boundary of the system under test (eg external HTTP calls, browser APIs). Do not mock internal library functions like `retryAsyncOperation` — use fake timers (`vi.useFakeTimers()`) instead to test time-dependent behaviour without real delays
 - for mocking responses from service calls out to other APIs, prefer Mock Service Worker rather than mocking fetch or HTTP clients like Wreck ([example](../../src/server/quote/check-your-answers/controller-post.test.js))
 - no need to reset or clear mocks within test files as `mockReset` is set globally for vitest
 - the test suite spins up a real redis container so tests **don't** have to mock functions that wrap it eg session cache
@@ -30,6 +30,7 @@ paths:
 ## Testing DOM / HTML
 
 - DOM testing library is used for querying the DOM, prefer that to native querySelector as it enables finding elements by ARIA role or associated label so builds in accessibility checks, for free
+- Use `toBeInTheDocument()` (from `@testing-library/jest-dom`) rather than `toBeTruthy()` for DOM presence assertions — `getByTestId` etc. throw when absent, so `toBeTruthy()` is always true for present elements and adds no assertion value
 
 ## Test readability
 
