@@ -27,6 +27,18 @@ paths:
 - When testing validation errors, use `submitForm` to POST invalid data, then pass the returned `cookie` directly to `loadPage` — `submitForm` already extracts the session cookie from `set-cookie` headers. Assert on `response.statusCode` (303) and `response.headers.location` before loading the redirected page.
 - When testing that a previous selection is persisted, submit valid data with `submitForm` and pass the returned `cookie` to a subsequent `loadPage` call.
 
+## Using a running server in tests
+
+- When a test needs a running server instance, use `setupTestServer` from `src/test-utils/setup-test-server.js` — it handles `beforeAll`/`afterAll` lifecycle, shares a single server instance across tests in the file, and ensures Redis is ready. Call the returned getter to get the server: `const getServer = setupTestServer()`, then `getServer()` inside tests.
+
+## Using sessions in tests
+
+- When a test needs a stable session ID (e.g. for rate limiting or any behaviour keyed on session), use `withValidQuoteSession` to prime a real server-side session and obtain a cookie. Pass that cookie to all subsequent `server.inject` calls so Yar reuses the same session ID across requests.
+
+## Module-level singletons
+
+- When a module exports a lazy singleton (e.g. a rate limiter, cache client, or DB connection initialised on first call), tests that mutate its config must reset it in `beforeAll`/`afterAll`. Verify a reset/teardown function exists and is called at the appropriate lifecycle hook — otherwise the stale singleton persists across test files and config mutations have no effect.
+
 ## Testing DOM / HTML
 
 - DOM testing library is used for querying the DOM, prefer that to native querySelector as it enables finding elements by ARIA role or associated label so builds in accessibility checks, for free
@@ -34,9 +46,6 @@ paths:
 
 ## Test readability
 
-- Keep fixtures and test utils out of tests and place in eg `src/test-utils` for re-use and to make the test file itself shorter and easier to read.
-- The test title should be in readable english and avoid too many implementation details
-
-## Fixtures
-
-- Re-use fixture fragments eg response JSON where possible to make it easier to maintain data contracts, as the codebase doesn't have the benefit of using Typescript. Shared fixtures can be placed in `src/test-utils/fixtures`
+- Test titles should be in readable English and avoid implementation details.
+- Do not define fixtures, helper functions, or large data objects inline in test files. Extract them to `src/test-utils/` (helpers) or `src/test-utils/fixtures/` (data). This keeps test files focused on assertions and makes fixtures reusable across tests.
+- Re-use fixture data across test files rather than duplicating it — this makes it easier to maintain data contracts, especially without TypeScript.
