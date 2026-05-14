@@ -1,6 +1,6 @@
 # Atlassian credentials setup
 
-Scripts under `.ai/skills/tools/jira/` and `.ai/skills/tools/confluence/` (and the agents and skills that call them — `browser-test`, `feature-builder`, etc.) require Atlassian API credentials.
+Scripts under `.ai/skills/tools/jira/` and `.ai/skills/tools/confluence/` (and the agents and skills that call them — `test-in-browser`, `feature-builder`, etc.) require Atlassian API credentials.
 
 ## Required environment variables
 

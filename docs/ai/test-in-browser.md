@@ -1,6 +1,6 @@
-# Using the browser-test skill
+# Using the test-in-browser skill
 
-The browser-test skill tests features against Jira acceptance criteria using a browser (via Playwright MCP).
+The test-in-browser skill tests features against Jira acceptance criteria using a browser (via Playwright MCP).
 
 ## Prerequisites
 
@@ -19,5 +19,5 @@ claude mcp add playwright npx @playwright/mcp@latest
 Invoke the skill with a Jira ticket number and base URL for testing, eg - :
 
 ```
-/browser-test NRF2-358 https://nrf-frontend.test.cdp-int.defra.cloud
+/test-in-browser NRF2-358 https://nrf-frontend.test.cdp-int.defra.cloud
 ```

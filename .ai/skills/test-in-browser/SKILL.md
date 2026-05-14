@@ -1,5 +1,5 @@
 ---
-name: browser-test
+name: test-in-browser
 description: Test a feature in the browser against Jira acceptance criteria
 ---
 
@@ -34,15 +34,7 @@ When you rely on code-derived knowledge, mark the row as "code-verified" in the 
 
 Do steps 1 and 2 **in parallel** — issue both calls in the same message so the browser is already loaded by the time Jira is read:
 
-1. Fetch the Jira ticket by running the ticket.sh script:
-
-   ```bash
-   bash ./.ai/skills/tools/jira/ticket.sh <ticket>
-   ```
-
-   Requires `ATLASSIAN_USER` and `ATLASSIAN_TOKEN` env vars. See [atlassian-credentials.md](../../../docs/ai/atlassian-credentials.md) in nrf-library for setup.
-
-   **If the script fails for any reason, stop immediately. Report the exact error and ask the user to fix it before retrying.**
+1. Invoke the `read-jira-ticket` skill with the ticket ID to fetch the ticket's details.
 
 2. Navigate to the test URL with `browser_navigate`.
 

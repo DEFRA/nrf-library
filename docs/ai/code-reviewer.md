@@ -23,13 +23,13 @@ Use the code-reviewer agent to review my changes
 Runs a one-off review in the current conversation context, without persistent memory.
 
 ```
-/code-review
+/review-nrf-code
 ```
 
 To review specific files only:
 
 ```
-/code-review src/server/quote/controller.js
+/review-nrf-code src/server/quote/controller.js
 ```
 
 ## Output

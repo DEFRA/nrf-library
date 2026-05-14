@@ -1,6 +1,6 @@
 ---
-name: code-review
-description: Review changed code against project coding standards
+name: review-nrf-code
+description: Reviews changed code against team coding standards. Use after writing code in a nrf-* repository
 run_as_subagent: true
 ---
 
