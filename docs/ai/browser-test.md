@@ -4,17 +4,9 @@ The browser-test skill tests features against Jira acceptance criteria using a b
 
 ## Prerequisites
 
-### Jira credentials
+### Atlassian credentials
 
-The `read-jira-ticket.sh` script requires `JIRA_USER` and `JIRA_TOKEN` environment variables. Set these once in `~/.env` — this file is shell-agnostic and works for zsh, bash, fish, etc.
-
-```sh
-# ~/.env
-JIRA_USER=your.name@example.com
-JIRA_TOKEN=your-jira-api-token
-```
-
-Your Jira API token can be generated at [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
+Agent skills require `ATLASSIAN_USER` and `ATLASSIAN_TOKEN` environment variables to access Jira and Confluence. See [atlassian-credentials.md](./atlassian-credentials.md) for setup.
 
 ### Playwright MCP
 

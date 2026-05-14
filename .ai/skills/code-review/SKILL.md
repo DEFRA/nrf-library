@@ -11,7 +11,7 @@ run_as_subagent: true
 
 ## Steps
 
-1. Read `.ai/rules/index.md` and all files it links to, to load the project coding standards.
+1. Read [.ai/rules/index.md](../../rules/index.md) and all files it links to, to load the project coding standards.
 2. Identify files to review:
    - If a GitHub PR URL was provided, run `gh pr diff <url> --name-only` to get the changed files, and `gh pr diff <url>` to read the diff content.
    - Otherwise, if files were passed as a parameter, use those.

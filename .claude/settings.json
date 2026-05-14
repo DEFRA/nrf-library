@@ -2,5 +2,19 @@
   "permissions": {
     "allow": ["Bash(gh pr comment *)"],
     "deny": ["Bash(gh *)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run format && npm run lint:js:fix",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
   }
 }

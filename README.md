@@ -7,6 +7,7 @@ Shared library for NRF projects, installable directly from GitHub.
 
 ## AI agent tools
 
+- [Setting Atlassian credentials](./docs/ai/atlassian-credentials.md)
 - [Code reviewer agent & skill](docs/ai/code-reviewer.md)
 - [Browser test skill](docs/ai/browser-test.md)
 
