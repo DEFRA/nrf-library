@@ -1,6 +1,7 @@
 ---
 name: test-in-browser
 description: Test a feature in the browser against Jira acceptance criteria
+tools: Bash, Read, mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_run_code_unsafe, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_close
 ---
 
 ## Parameters
@@ -16,7 +17,7 @@ description: Test a feature in the browser against Jira acceptance criteria
 - **Cookies:** HttpOnly — cannot be inspected via JS
 - **CSRF:** All form POSTs are CSRF-protected — never POST via `fetch`
 - **Jira:** `https://eaflood.atlassian.net/browse/<ticket>`
-- **Browser:** Use only Claude Code's built-in `browser_*` tools. Never use MCP browser tools. If any browser tool fails, stop and report the error immediately.
+- **Browser:** Use only the Playwright MCP tools (`mcp__playwright__browser_navigate`, `mcp__playwright__browser_snapshot`, `mcp__playwright__browser_evaluate`, `mcp__playwright__browser_run_code_unsafe`, `mcp__playwright__browser_close`, etc.). Never use Chrome DevTools MCP tools (`mcp__plugin_chrome-devtools-mcp_chrome-devtools__*`). If Playwright MCP tools are not available, stop immediately and report this to the user.
 
 ## ⛔ Black-box rule — don't read source code unless necessary
 
@@ -36,9 +37,9 @@ Do steps 1 and 2 **in parallel** — issue both calls in the same message so the
 
 1. Invoke the `read-jira-ticket` skill with the ticket ID to fetch the ticket's details.
 
-2. Navigate to the test URL with `browser_navigate`.
+2. Navigate to the test URL with `mcp__playwright__browser_navigate`.
 
-Once both complete: confirm the correct page loaded via `browser_snapshot`, then extract every scenario as a numbered checklist before proceeding.
+Once both complete: confirm the correct page loaded via `mcp__playwright__browser_snapshot`, then extract every scenario as a numbered checklist before proceeding.
 
 **If any scenario or acceptance criterion is unclear, ambiguous, or untestable** (e.g. missing expected values, vague assertions, or steps that can't be verified in a browser), flag it to the user before testing that scenario. Ask for clarification rather than guessing. Note any assumptions you had to make in the results table.
 
@@ -48,25 +49,25 @@ Output one short line before every tool call. Announce each scenario by title on
 
 ## Browser testing
 
-**Clean state:** Use `browser_navigate` to reset state between scenarios. Don't try to clear HttpOnly cookies via JS — it won't work. Don't POST via `fetch` — CSRF will block it. Note any cookie-state limitations in the results table.
+**Clean state:** Use `mcp__playwright__browser_navigate` to reset state between scenarios. Don't try to clear HttpOnly cookies via JS — it won't work. Don't POST via `fetch` — CSRF will block it. Note any cookie-state limitations in the results table.
 
 To fully clear all cookies (including HttpOnly/server-set ones), use Playwright's context API:
 
 ```js
-// via browser_run_code_unsafe:
+// via mcp__playwright__browser_run_code_unsafe:
 ;async (page) => {
   await page.context().clearCookies()
   return 'cookies cleared'
 }
 ```
 
-**Assertions:** Prefer `browser_evaluate` — fast and precise. Only use `browser_snapshot` when you need to discover an unknown selector. Don't take screenshots.
+**Assertions:** Prefer `mcp__playwright__browser_evaluate` — fast and precise. Only use `mcp__playwright__browser_snapshot` when you need to discover an unknown selector. Don't take screenshots.
 
 **Browser tool errors:** Retry once. If the retry fails, stop and wait for the user.
 
 ## Cleanup
 
-Close the browser with `browser_close` after all scenarios.
+Close the browser with `mcp__playwright__browser_close` after all scenarios.
 
 ## Output format
 
