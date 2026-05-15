@@ -40,8 +40,16 @@ paths:
 
 - Where you need to interact with other services eg APIs, wrap the code in a service (see examples in `src/common/services`
 - If a service interaction is not blocking the user experience, consider adding a retry mechanism
-- Use a single HTTP client if possible (wreck?) and wrap it in a helper so eg tracing header is always sent
 - Base paths for other services should come from config as a separate env var (eg avoid getImpactAssessorUrl)
+
+#### Backend-to-backend HTTP calls
+
+All backend HTTP calls **must** go through a service module — never call `@hapi/wreck` (or any HTTP client) directly from a controller or route handler.
+
+- Create a service module under `src/server/common/services/` (e.g. `src/server/common/services/nrf-backend.js`)
+- The service must wrap `@hapi/wreck` and must inject the tracing header on every outbound request (see the Tracing section above)
+- The canonical example to follow is `nrf-frontend/src/server/common/services/nrf-backend.js` — replicate this pattern for any new service in any frontend app, including `admin-frontend`
+- The base URL for the target service must come from config (a dedicated env var), not be hard-coded or constructed dynamically in the caller
 
 ### Security
 

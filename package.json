@@ -1,6 +1,6 @@
 {
   "name": "@defra/nrf-library",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Shared library for NRF projects.",
   "type": "module",
   "main": "index.js",

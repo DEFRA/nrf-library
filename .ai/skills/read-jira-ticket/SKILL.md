@@ -12,7 +12,7 @@ description: Fetch a Jira ticket's details (summary, description, acceptance cri
 1. Run the ticket script:
 
    ```bash
-   bash ./.ai/skills/tools/jira/ticket.sh <ticket>
+   bash ./node_modules/@defra/nrf-library/.ai/skills/tools/jira/ticket.sh <ticket>
    ```
 
    Requires `ATLASSIAN_USER` and `ATLASSIAN_TOKEN` env vars. See [atlassian-credentials.md](../../../docs/ai/atlassian-credentials.md) for setup.
