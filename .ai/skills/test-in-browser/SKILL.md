@@ -1,5 +1,5 @@
 ---
-name: browser-test
+name: test-in-browser
 description: Test a feature in the browser against Jira acceptance criteria
 ---
 
@@ -18,30 +18,23 @@ description: Test a feature in the browser against Jira acceptance criteria
 - **Jira:** `https://eaflood.atlassian.net/browse/<ticket>`
 - **Browser:** Use only Claude Code's built-in `browser_*` tools. Never use MCP browser tools. If any browser tool fails, stop and report the error immediately.
 
-## ⛔ Black-box rule — no source code
+## ⛔ Black-box rule — don't read source code unless necessary
 
-**Never read source files, config files, or implementation code** — not to find a URL, a selector, or to debug a failure. Use the browser alone, exactly as a user would.
+**Default to the browser alone, exactly as a user would.** Don't read source files, config files, or implementation code to find a URL, a selector, or to debug a failure — if a user can't see it, neither should you.
 
-The only exceptions are things physically impossible to observe in a browser:
+Exceptions are limited to cases where the AC genuinely can't be verified from the browser alone:
 
-- HttpOnly / Secure cookie flags
-- Server-set cookie expiry
+- Things physically unobservable in a browser (e.g. `HttpOnly` / `Secure` cookie flags, server-set cookie expiry).
+- Named implementation details the AC depends on (e.g. specific cookie names to assert presence/absence of, a policy version field, a config flag or env var used to simulate a state a user can't reach).
+- Test hooks the implementer has provided to make an AC testable — prefer using these over skipping the scenario. The ticket's testing notes are the expected channel for the implementer to surface these; check there first before reading code.
 
-If you read code for these, mark the result as "code-verified" in the results table.
+When you rely on code-derived knowledge, mark the row as "code-verified" in the results table and note exactly what you looked up. Every code read must be visible in the output.
 
 ## Setup
 
 Do steps 1 and 2 **in parallel** — issue both calls in the same message so the browser is already loaded by the time Jira is read:
 
-1. Fetch the Jira ticket by running the script in the same folder as this file:
-
-   ```bash
-   bash <path>/read-jira-ticket.sh <ticket>
-   ```
-
-   Uses `JIRA_USER` and `JIRA_TOKEN` env vars (loaded from `~/.env` if not set). See `docs/feature-tester.md` in nrf-library for setup.
-
-   **If the script fails for any reason, stop immediately. Report the exact error and ask the user to fix it before retrying.**
+1. Invoke the `read-jira-ticket` skill with the ticket ID to fetch the ticket's details.
 
 2. Navigate to the test URL with `browser_navigate`.
 
