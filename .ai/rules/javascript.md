@@ -11,10 +11,12 @@ paths:
 - Use short, single-purpose functions. Any over 75 lines will be failed by SonarQube, but aim to make them shorter.
 - If there are multiple function params, use an object param instead
 - For functions that accept params that are structured objects, add JSDoc annotations — this applies to all functions, including module-private helpers, not just exported ones. No need to add JSDoc for params with primitive types as those can be inferred.
+- All functions should be named, not anonymous, to improve readability in stack traces
+- Prefer named exports (`export const`, `export function`) over default exports. Default exports are acceptable for page-level single-purpose files where the file name already conveys the identity (e.g. `get-view-model.js`, `form-validation.js`) — but always name the function even then: `export default function getViewModel() { ... }` not `export default function () { ... }`
 
 ## Functional / classes
 
-- Favour functional over classes
+- Favour functional approach over instantiable classes
 
 ## Server-side code
 
@@ -32,7 +34,7 @@ paths:
 
 #### Logging
 
-- call `logger.error(error, message)` — always pass the error instance as the first param, message string second
+- call `logger.error(error, message)` — always pass the error instance as the first param, message string second. Never call `logger.error(error)` with one argument (the message is lost) or `logger.error('string', {...})` with a string first (the error object is dropped from structured logs)
 - call `logger.info({ ...context }, message)` — always pass a context object as the first param, never a plain string; include relevant identifiers (eg IDs, template names) in the context object
 - prefer using createLogger in modules rather than passing the request.logger in as a function parameter
 
@@ -61,10 +63,47 @@ All backend HTTP calls **must** go through a service module — never call `@hap
 ### Validation
 
 - if validating any object or response payload, use Joi rather than custom validation
+- favour tighter validation over loose validation eg if accepting a string field in a payload, apply a max length if possible and sanitize
+- extract reusable validation fragments into mini-schemas
 
 ### HTTP status codes
 
 - Always use `statusCodes.<name>` from `src/server/common/constants/status-codes.js` rather than literal numbers (e.g. `statusCodes.noContent` not `204`)
+
+## Hapi route & controller conventions
+
+### Frontend POST–Redirect–GET (PRG) pattern
+
+Frontend form POST handlers must follow PRG:
+
+- On validation failure: save errors and submitted values to the session flash, then `h.redirect(request.path).code(statusCodes.redirectAfterPost).takeover()` — never re-render the view directly from a `failAction`
+- On success: save data to session then `h.redirect(nextPage).code(statusCodes.redirectAfterPost)`
+- Use `statusCodes.redirectAfterPost` (303), not a literal number
+
+This ensures browser back/refresh doesn't re-submit the form.
+
+### Handler method style
+
+Use method shorthand syntax inside controller objects:
+
+```js
+export const myController = {
+  async handler(request, h) { ... }
+}
+```
+
+Do not use arrow function syntax for `handler` (`handler: async (request, h) => { ... }`) — method shorthand is consistent with how Hapi documents its API and matches the pattern used across the codebase.
+
+### Responses
+
+Always return `h.response(payload)` rather than returning a raw object — Hapi will not set status codes or headers on a raw return value. Return `Boom.*()` errors directly (they do not need to be wrapped in `h.response()`).
+
+## Session (Yar)
+
+- Access the session via `request.yar` inside route handlers
+- Use `request.yar.set(key, value)`, `request.yar.get(key)`, and `request.yar.clear(key)` — do not access the underlying storage directly
+- Session keys must be camelCase strings (e.g. `'quoteData'`, `'pendingUploadId'`) — never snake_case
+- Session data should be validated with Joi when read back, not assumed to be the shape that was written
 
 ## Client-side Javascript (run in the browser)
 
