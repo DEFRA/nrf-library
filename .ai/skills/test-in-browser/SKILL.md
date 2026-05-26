@@ -1,7 +1,7 @@
 ---
 name: test-in-browser
 description: Test a feature in the browser against Jira acceptance criteria
-tools: Bash, Read, mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_run_code_unsafe, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_close
+tools: Bash, Read, mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, mcp__playwright__browser_snapshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_run_code_unsafe, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_close, mcp__playwright__browser_console_messages, mcp__playwright__browser_network_requests
 ---
 
 ## Parameters
@@ -64,6 +64,13 @@ To fully clear all cookies (including HttpOnly/server-set ones), use Playwright'
 **Assertions:** Prefer `mcp__playwright__browser_evaluate` — fast and precise. Only use `mcp__playwright__browser_snapshot` when you need to discover an unknown selector. Don't take screenshots.
 
 **Browser tool errors:** Retry once. If the retry fails, stop and wait for the user.
+
+## Error monitoring
+
+After each scenario, check for client-side errors using `mcp__playwright__browser_console_messages` and `mcp__playwright__browser_network_requests`. Flag in the Notes column:
+
+- Console errors or warnings (ignore info/debug level)
+- Failed network requests (4xx/5xx responses, or requests that never completed)
 
 ## Cleanup
 
