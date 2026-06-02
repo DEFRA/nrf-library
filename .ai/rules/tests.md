@@ -53,3 +53,7 @@ paths:
 ## Config values in tests
 
 - Do not assert on literal strings that are config defaults (e.g. a header name like `'x-cdp-request-id'`). Read the value from config instead, or mock config explicitly — otherwise the test passes even when config changes the value at runtime.
+
+## Test performance
+
+- Favour fast tests over extending test timeouts. If a test is slow because it repeats an operation many times to reach a threshold (e.g. firing 60+ requests to trip a rate limit), lower that threshold in the test environment via config (e.g. `default: isTest ? 5 : 60`) rather than raising the test's timeout. Extending the timeout hides slowness and makes the suite drag; reducing the work keeps the test fast and still proves the behaviour.

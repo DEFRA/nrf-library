@@ -10,7 +10,7 @@ paths:
 
 - Use short, single-purpose functions. Any over 75 lines will be failed by SonarQube, but aim to make them shorter.
 - If there are multiple function params, use an object param instead
-- For functions that accept params that are structured objects, add JSDoc annotations — this applies to all functions, including module-private helpers, not just exported ones. No need to add JSDoc for params with primitive types as those can be inferred.
+- For functions that accept params that include structured objects, add JSDoc annotations for the entire signature (all params, not just the structured ones) — this applies to all functions, including module-private helpers, not just exported ones. Functions where every param is a primitive don't need JSDoc as the types can be inferred.
 - All functions should be named, not anonymous, to improve readability in stack traces
 - Prefer named exports (`export const`, `export function`) over default exports. Default exports are acceptable for page-level single-purpose files where the file name already conveys the identity (e.g. `get-view-model.js`, `form-validation.js`) — but always name the function even then: `export default function getViewModel() { ... }` not `export default function () { ... }`
 
@@ -39,6 +39,8 @@ paths:
 - prefer using createLogger in modules rather than passing the request.logger in as a function parameter
 
 ### Services pattern
+
+The `src/services/` (backend) and `src/server/common/services/` (frontend) folders are for code that interacts with **external systems** — databases, HTTP APIs, message brokers (SNS/SQS), email providers (Notify), etc. Pure utility functions (crypto helpers, formatters, validators) belong in `src/common/helpers/` instead.
 
 - Where you need to interact with other services eg APIs, wrap the code in a service (see examples in `src/common/services`
 - If a service interaction is not blocking the user experience, consider adding a retry mechanism
