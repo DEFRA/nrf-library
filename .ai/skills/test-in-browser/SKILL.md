@@ -16,6 +16,7 @@ tools: Bash, Read, mcp__playwright__browser_navigate, mcp__playwright__browser_n
 - **Framework:** Hapi.js with Nunjucks templates
 - **Cookies:** HttpOnly — cannot be inspected via JS
 - **CSRF:** All form POSTs are CSRF-protected — never POST via `fetch`
+- **Bot filtering (deployed environments):** Deployed environments (e.g. `*.cdp-int.defra.cloud`) run a bot filter that suppresses page content for headless/scanner user agents. Playwright's default UA contains `HeadlessChrome`, so it gets treated as a scanner: requests return **200 with an empty page body (heading only, no content or error)** and do **not** consume a magic-link session. This silently breaks every scenario and looks like a content/render bug. **Always set a real-browser UA before testing on a deployed environment** — see "User agent" below.
 - **Jira:** `https://eaflood.atlassian.net/browse/<ticket>`
 - **Browser:** Use only the Playwright MCP tools (`mcp__playwright__browser_navigate`, `mcp__playwright__browser_snapshot`, `mcp__playwright__browser_evaluate`, `mcp__playwright__browser_run_code_unsafe`, `mcp__playwright__browser_close`, etc.). Never use Chrome DevTools MCP tools (`mcp__plugin_chrome-devtools-mcp_chrome-devtools__*`). If Playwright MCP tools are not available, stop immediately and report this to the user.
 
@@ -33,6 +34,8 @@ When you rely on code-derived knowledge, mark the row as "code-verified" in the 
 
 ## Setup
 
+Confirm the Playwright MCP server is configured with a real-browser user agent before proceeding — see "User agent" under Browser testing. Otherwise the bot filter silently returns empty pages to Playwright's default headless UA.
+
 Do steps 1 and 2 **in parallel** — issue both calls in the same message so the browser is already loaded by the time Jira is read:
 
 1. Invoke the `read-jira-ticket` skill with the ticket ID to fetch the ticket's details.
@@ -48,6 +51,14 @@ Once both complete: confirm the correct page loaded via `mcp__playwright__browse
 Output one short line before every tool call. Announce each scenario by title only (no markdown headings). After each scenario output `"Scenario N done — PASS"` or `"Scenario N done — FAIL: <reason>"`. If a tool call is slow, output `"Waiting for browser — <tool name>..."`. If a tool call errors, output `"FAILED: <tool name> — <error>. Stopping this scenario."`.
 
 ## Browser testing
+
+**User agent:** On deployed environments the bot filter (see Project context) blanks the page for Playwright's default `HeadlessChrome` UA. The fix is to pass `--user-agent` to the Playwright MCP server so it applies globally to every session — add it to the server's args in `~/.claude.json` (user scope) or via `claude mcp add`:
+
+```
+--user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+```
+
+Restart Claude Code after changing MCP server args for them to take effect.
 
 **Clean state:** Use `mcp__playwright__browser_navigate` to reset state between scenarios. Don't try to clear HttpOnly cookies via JS — it won't work. Don't POST via `fetch` — CSRF will block it. Note any cookie-state limitations in the results table.
 
