@@ -108,8 +108,8 @@ if [[ -z "$TICKET" ]]; then
     exit 1
 fi
 
-# Validate ticket key format
-if [[ ! "$TICKET" =~ ^[A-Z]+-[0-9]+$ ]]; then
+# Validate ticket key format (project key may contain digits, e.g. NRF2-731)
+if [[ ! "$TICKET" =~ ^[A-Z][A-Z0-9]*-[0-9]+$ ]]; then
     echo "Error: Invalid ticket key format '$TICKET'. Expected format: IMTA-12345"
     exit 1
 fi
