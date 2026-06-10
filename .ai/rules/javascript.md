@@ -66,7 +66,7 @@ All backend HTTP calls **must** go through a service module — never call `@hap
 
 - if validating any object or response payload, use Joi rather than custom validation
 - favour tighter validation over loose validation eg if accepting a string field in a payload, apply a max length if possible and sanitize
-- extract reusable validation fragments into mini-schemas
+- always prefer re-using an existing Joi fragment over writing a new inline schema. Before adding a field schema (email, reference, token, etc.) to a controller or route, check `src/server/common/validation/` (and nearby `form-validation.js` files) for one that already covers it. If a suitable fragment exists, import and reuse it; if two or more places need the same field validation, extract a shared fragment into `src/server/common/validation/` rather than duplicating the rules and messages inline. Duplicated field validation is a frequent source of frontend/backend divergence (e.g. one place accepting an address the other rejects)
 
 ### HTTP status codes
 
