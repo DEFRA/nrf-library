@@ -62,6 +62,13 @@ All backend HTTP calls **must** go through a service module — never call `@hap
 - Every POST route that accepts a request body must have a `options.validate.payload` Joi schema — especially unauthenticated ones. Without it, raw user-supplied values can be used for dynamic dispatch or passed directly to loggers/services
 - Nunjucks `autoescape: true` HTML-encodes output but does NOT prevent JS injection inside `<script>` blocks — any `{{ variable }}` rendered inside a JS string literal must either be validated against a strict allowlist (e.g. `/^GTM-[A-Z0-9]+$/`) or use the `| dump` filter to JSON-encode it safely
 
+#### SQL injection (`pg`)
+
+- Pass **values** as parameters, never interpolate them into the SQL string. Use placeholders (`$1`, `$2`, …) with the values array as the second arg to `db.query`: `db.query('... WHERE reference = $1', [reference])`. Never build queries with template literals or `+` containing a value (`` `... WHERE reference = '${reference}'` ``).
+- SQL identifiers (table/column names) can't be parameterized. Avoid interpolating them at all; if a query genuinely needs a dynamic identifier, the value must come from a hard-coded allowlist (a constant map/array in the code), never from request input.
+- Interpolating a **static constant** SQL fragment (e.g. `` `${QUOTE_SELECT_SQL} WHERE q.reference = $1` `` where `QUOTE_SELECT_SQL` is a module constant) is fine — the rule is about dynamic/request-derived data, not constants.
+- When reviewing: flag any template literal or string concatenation inside a `.query(...)` call that contains anything other than a static constant. The values must be in the params array.
+
 ### Validation
 
 - if validating any object or response payload, use Joi rather than custom validation
