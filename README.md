@@ -8,3 +8,7 @@ Shared library for NRF projects, installable directly from GitHub.
 ## Code utilities
 
 - [retryAsyncOperation](./src/server/utils/retry-async-operation/index.js) - a wrapper function to retry any async operation with configurable interval / retry count
+
+## Constants
+
+Red line boundary errors and constants are under `src/constants`
