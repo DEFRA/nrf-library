@@ -32,6 +32,7 @@ export const BOUNDARY_ERRORS = {
     ZIP_AMBIGUOUS_FILENAME: 'zip_ambiguous_filename',
     UNSUPPORTED_FILE_TYPE: 'unsupported_file_type',
     UNREADABLE_GEOMETRY_FILE: 'unreadable_geometry_file',
+    FILE_CONTAINS_VIRUS: 'file_contains_virus',
     FILE_REJECTED_BY_UPLOADER: 'file_rejected_by_uploader',
     UNSUPPORTED_CRS: 'unsupported_crs',
     MISSING_CRS: 'missing_crs'
@@ -56,3 +57,12 @@ export const BOUNDARY_ERRORS = {
 export const KNOWN_BOUNDARY_ERROR_CODES = new Set(
   Object.values(BOUNDARY_ERRORS).flatMap((group) => Object.values(group))
 )
+
+// Codes for files rejected before any geometry is parsed (CDP Uploader
+// rejections). The frontend sends the user back to the upload page to retry,
+// rather than to the boundary preview page which has no geometry to show.
+export const UPLOAD_REJECTION_CODES = new Set([
+  BOUNDARY_ERRORS.UPLOAD.FILE_SIZE_TOO_LARGE,
+  BOUNDARY_ERRORS.UPLOAD.FILE_CONTAINS_VIRUS,
+  BOUNDARY_ERRORS.UPLOAD.FILE_REJECTED_BY_UPLOADER
+])

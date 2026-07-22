@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { BOUNDARY_ERRORS, KNOWN_BOUNDARY_ERROR_CODES } from './index.js'
+import {
+  BOUNDARY_ERRORS,
+  KNOWN_BOUNDARY_ERROR_CODES,
+  UPLOAD_REJECTION_CODES
+} from './index.js'
 
 describe('BOUNDARY_ERRORS', () => {
   it('groups codes under UPLOAD, GEOMETRY, and SERVICE', () => {
@@ -39,5 +43,21 @@ describe('KNOWN_BOUNDARY_ERROR_CODES', () => {
 
   it('does not contain an unrecognised code', () => {
     expect(KNOWN_BOUNDARY_ERROR_CODES.has('not_a_real_code')).toBe(false)
+  })
+})
+
+describe('UPLOAD_REJECTION_CODES', () => {
+  it('contains the file-level rejection codes', () => {
+    expect([...UPLOAD_REJECTION_CODES]).toEqual([
+      BOUNDARY_ERRORS.UPLOAD.FILE_SIZE_TOO_LARGE,
+      BOUNDARY_ERRORS.UPLOAD.FILE_CONTAINS_VIRUS,
+      BOUNDARY_ERRORS.UPLOAD.FILE_REJECTED_BY_UPLOADER
+    ])
+  })
+
+  it('only contains recognised codes', () => {
+    for (const code of UPLOAD_REJECTION_CODES) {
+      expect(KNOWN_BOUNDARY_ERROR_CODES.has(code)).toBe(true)
+    }
   })
 })
