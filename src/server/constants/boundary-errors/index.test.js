@@ -47,13 +47,19 @@ describe('KNOWN_BOUNDARY_ERROR_CODES', () => {
 })
 
 describe('UPLOAD_REJECTION_CODES', () => {
-  it('contains the file-level rejection codes', () => {
-    expect([...UPLOAD_REJECTION_CODES]).toEqual([
-      BOUNDARY_ERRORS.UPLOAD.FILE_SIZE_TOO_LARGE,
-      BOUNDARY_ERRORS.UPLOAD.FILE_CONTAINS_VIRUS,
-      BOUNDARY_ERRORS.UPLOAD.FILE_REJECTED_BY_UPLOADER,
-      BOUNDARY_ERRORS.UPLOAD.UPLOAD_FILE_MISSING
-    ])
+  it('contains every UPLOAD-group code', () => {
+    expect([...UPLOAD_REJECTION_CODES].sort()).toEqual(
+      Object.values(BOUNDARY_ERRORS.UPLOAD).sort()
+    )
+  })
+
+  it('excludes GEOMETRY and SERVICE codes', () => {
+    for (const code of [
+      ...Object.values(BOUNDARY_ERRORS.GEOMETRY),
+      ...Object.values(BOUNDARY_ERRORS.SERVICE)
+    ]) {
+      expect(UPLOAD_REJECTION_CODES.has(code)).toBe(false)
+    }
   })
 
   it('only contains recognised codes', () => {

@@ -58,12 +58,10 @@ export const KNOWN_BOUNDARY_ERROR_CODES = new Set(
   Object.values(BOUNDARY_ERRORS).flatMap((group) => Object.values(group))
 )
 
-// Codes for files rejected before any geometry is parsed (CDP Uploader
-// rejections). The frontend sends the user back to the upload page to retry,
-// rather than to the boundary preview page which has no geometry to show.
-export const UPLOAD_REJECTION_CODES = new Set([
-  BOUNDARY_ERRORS.UPLOAD.FILE_SIZE_TOO_LARGE,
-  BOUNDARY_ERRORS.UPLOAD.FILE_CONTAINS_VIRUS,
-  BOUNDARY_ERRORS.UPLOAD.FILE_REJECTED_BY_UPLOADER,
-  BOUNDARY_ERRORS.UPLOAD.UPLOAD_FILE_MISSING
-])
+// Every UPLOAD-group failure (size/zip/filename/CRS/CDP Uploader rejections,
+// and upload infrastructure failures) sends the user back to the upload page
+// to retry — there is no geometry to preview. Only GEOMETRY and SERVICE
+// failures keep the user on the boundary preview page.
+export const UPLOAD_REJECTION_CODES = new Set(
+  Object.values(BOUNDARY_ERRORS.UPLOAD)
+)
