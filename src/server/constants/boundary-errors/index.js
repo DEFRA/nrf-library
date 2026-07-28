@@ -43,6 +43,7 @@ export const BOUNDARY_ERRORS = {
     SELF_INTERSECTING: 'self_intersecting_geometry',
     HAS_HOLES: 'geometry_has_holes',
     DUPLICATE_VERTICES: 'duplicate_vertices',
+    UNCLOSED_RING: 'unclosed_ring',
     NO_POLYGON_FOUND: 'no_polygon_found'
   },
   SERVICE: {
