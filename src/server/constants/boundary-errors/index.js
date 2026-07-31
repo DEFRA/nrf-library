@@ -44,7 +44,8 @@ export const BOUNDARY_ERRORS = {
     HAS_HOLES: 'geometry_has_holes',
     DUPLICATE_VERTICES: 'duplicate_vertices',
     UNCLOSED_RING: 'unclosed_ring',
-    NO_POLYGON_FOUND: 'no_polygon_found'
+    NO_POLYGON_FOUND: 'no_polygon_found',
+    COORDINATES_OUT_OF_RANGE: 'coordinates_out_of_range'
   },
   SERVICE: {
     IMPACT_ASSESSOR_UNREACHABLE: 'impact_assessor_unreachable',
