@@ -144,52 +144,17 @@ describe('quotePatchSchema', () => {
         expect(error).toBeDefined()
       })
 
-      it('requires band between 1 and 4', () => {
+      it.each([
+        ['outside the 1-4 range', { min: 1, max: 5 }],
+        ['of 0', { min: 0, max: 1 }],
+        ['that is not an integer', { min: 1.5, max: 2 }]
+      ])('rejects a band %s', (_, band) => {
         const { error } = validate({
           edps: [
             {
               ...validEdp,
               impact: {
-                nitrogenTotal: {
-                  ...validImpactMeasurement,
-                  band: { min: 1, max: 5 }
-                },
-                phosphorusTotal: validImpactMeasurement
-              }
-            }
-          ]
-        })
-        expect(error).toBeDefined()
-      })
-
-      it('rejects band of 0', () => {
-        const { error } = validate({
-          edps: [
-            {
-              ...validEdp,
-              impact: {
-                nitrogenTotal: {
-                  ...validImpactMeasurement,
-                  band: { min: 0, max: 1 }
-                },
-                phosphorusTotal: validImpactMeasurement
-              }
-            }
-          ]
-        })
-        expect(error).toBeDefined()
-      })
-
-      it('band must be an integer', () => {
-        const { error } = validate({
-          edps: [
-            {
-              ...validEdp,
-              impact: {
-                nitrogenTotal: {
-                  ...validImpactMeasurement,
-                  band: { min: 1.5, max: 2 }
-                },
+                nitrogenTotal: { ...validImpactMeasurement, band },
                 phosphorusTotal: validImpactMeasurement
               }
             }
@@ -224,13 +189,16 @@ describe('quotePatchSchema', () => {
       expect(error).toBeUndefined()
     })
 
-    it('requires label', () => {
-      const { label: _, ...rest } = validCatchment
-      const { error } = validate({
-        edps: [{ ...validEdp, catchments: [rest] }]
-      })
-      expect(error).toBeDefined()
-    })
+    it.each(['label', 'catchmentId', 'catchmentOverlapPercentage'])(
+      'requires %s',
+      (field) => {
+        const { [field]: _, ...rest } = validCatchment
+        const { error } = validate({
+          edps: [{ ...validEdp, catchments: [rest] }]
+        })
+        expect(error).toBeDefined()
+      }
+    )
 
     it('accepts a null catchmentId', () => {
       const { error } = validate({
@@ -242,22 +210,6 @@ describe('quotePatchSchema', () => {
         ]
       })
       expect(error).toBeUndefined()
-    })
-
-    it('requires catchmentId', () => {
-      const { catchmentId: _, ...rest } = validCatchment
-      const { error } = validate({
-        edps: [{ ...validEdp, catchments: [rest] }]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('requires catchmentOverlapPercentage', () => {
-      const { catchmentOverlapPercentage: _, ...rest } = validCatchment
-      const { error } = validate({
-        edps: [{ ...validEdp, catchments: [rest] }]
-      })
-      expect(error).toBeDefined()
     })
 
     it('rejects an overlap percentage above 100', () => {
@@ -292,32 +244,13 @@ describe('quotePatchSchema', () => {
       expect(error).toBeDefined()
     })
 
-    it('requires amountExcludingVat', () => {
-      const { amountExcludingVat: _, ...rest } = validEdp.levyGbp
-      const { error } = validate({
-        edps: [{ ...validEdp, levyGbp: rest }]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('requires amountInflationAdjusted', () => {
-      const { amountInflationAdjusted: _, ...rest } = validEdp.levyGbp
-      const { error } = validate({
-        edps: [{ ...validEdp, levyGbp: rest }]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('requires baseAmount', () => {
-      const { baseAmount: _, ...rest } = validEdp.levyGbp
-      const { error } = validate({
-        edps: [{ ...validEdp, levyGbp: rest }]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('requires modelVersion', () => {
-      const { modelVersion: _, ...rest } = validEdp.levyGbp
+    it.each([
+      'amountExcludingVat',
+      'amountInflationAdjusted',
+      'baseAmount',
+      'modelVersion'
+    ])('requires %s', (field) => {
+      const { [field]: _, ...rest } = validEdp.levyGbp
       const { error } = validate({
         edps: [{ ...validEdp, levyGbp: rest }]
       })
@@ -348,29 +281,9 @@ describe('quotePatchSchema', () => {
       expect(error).toBeDefined()
     })
 
-    it('requires modelVersion to be an integer', () => {
+    it.each([1.5, 0, -1])('rejects a modelVersion of %s', (modelVersion) => {
       const { error } = validate({
-        edps: [
-          { ...validEdp, levyGbp: { ...validEdp.levyGbp, modelVersion: 1.5 } }
-        ]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('rejects modelVersion of 0', () => {
-      const { error } = validate({
-        edps: [
-          { ...validEdp, levyGbp: { ...validEdp.levyGbp, modelVersion: 0 } }
-        ]
-      })
-      expect(error).toBeDefined()
-    })
-
-    it('rejects a negative modelVersion', () => {
-      const { error } = validate({
-        edps: [
-          { ...validEdp, levyGbp: { ...validEdp.levyGbp, modelVersion: -1 } }
-        ]
+        edps: [{ ...validEdp, levyGbp: { ...validEdp.levyGbp, modelVersion } }]
       })
       expect(error).toBeDefined()
     })

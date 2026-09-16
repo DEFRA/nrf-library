@@ -12,7 +12,7 @@ export const tokenPattern = /[a-zA-Z0-9_-]+/
 
 /**
  * Shared Joi fragment for a quote reference route param or query field.
- * @returns {import('joi').StringSchema}
+ * @type {import('joi').StringSchema}
  */
 export const referenceParam = joi
   .string()
@@ -21,7 +21,7 @@ export const referenceParam = joi
 
 /**
  * Shared Joi fragment for a quote access-link token.
- * @returns {import('joi').StringSchema}
+ * @type {import('joi').StringSchema}
  */
 export const tokenParam = joi
   .string()

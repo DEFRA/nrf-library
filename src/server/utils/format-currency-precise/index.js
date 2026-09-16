@@ -6,7 +6,9 @@
  * precise figures identically; nrf-admin-frontend registers it as a Nunjucks
  * filter.
  *
- * @param {number | string} value - The amount to format.
+ * @param {number | string} value - The amount to format. Callers must pass a
+ * number or numeric string (non-numeric input renders as £NaN); inputs are
+ * expected to arrive schema-validated from the API.
  * @param {string} [locale='en-GB'] - BCP 47 locale tag.
  * @param {string} [currency='GBP'] - ISO 4217 currency code.
  * @returns {string} The formatted currency string.
