@@ -39,7 +39,7 @@ export function createMetricsCounter({ isEnabled, logger } = {}) {
       )
       await metricsLogger.flush()
     } catch (error) {
-      logger?.error(error, error.message)
+      logger?.error(error, error?.message ?? 'Metrics flush failed')
     }
   }
 }

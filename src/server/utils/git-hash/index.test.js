@@ -1,3 +1,5 @@
+import { rmSync, writeFileSync } from 'node:fs'
+
 import { getGitHash } from './index.js'
 
 describe('#getGitHash', () => {
@@ -15,5 +17,21 @@ describe('#getGitHash', () => {
     vi.stubEnv('GIT_HASH', '')
 
     expect(getGitHash()).toBe('unknown')
+  })
+
+  describe('When GIT_HASH is unset and a .git-hash file exists', () => {
+    beforeEach(() => {
+      writeFileSync('.git-hash', 'file-hash-456')
+    })
+
+    afterEach(() => {
+      rmSync('.git-hash')
+    })
+
+    it('should return the .git-hash file contents', () => {
+      vi.stubEnv('GIT_HASH', '')
+
+      expect(getGitHash()).toBe('file-hash-456')
+    })
   })
 })

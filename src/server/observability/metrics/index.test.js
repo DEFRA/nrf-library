@@ -23,12 +23,6 @@ const defaultMetricsValue = 1
 const mockValue = 200
 
 describe('#createMetricsCounter', () => {
-  beforeEach(() => {
-    mockPutMetric.mockClear()
-    mockFlush.mockClear()
-    mockLoggerError.mockClear()
-  })
-
   describe('When the counter is disabled', () => {
     it('should not emit metrics when isEnabled is false', async () => {
       const metricsCounter = createMetricsCounter({ isEnabled: false })
@@ -113,6 +107,23 @@ describe('#createMetricsCounter', () => {
       await expect(
         metricsCounter(mockMetricsName, mockValue)
       ).resolves.toBeUndefined()
+    })
+
+    it('should fall back to a generic message when the thrown value is not an Error', async () => {
+      mockFlush.mockRejectedValueOnce(mockError)
+      const metricsCounter = createMetricsCounter({
+        isEnabled: true,
+        logger: { error: mockLoggerError }
+      })
+
+      await expect(
+        metricsCounter(mockMetricsName, mockValue)
+      ).resolves.toBeUndefined()
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        mockError,
+        'Metrics flush failed'
+      )
     })
   })
 })
