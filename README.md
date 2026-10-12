@@ -24,6 +24,15 @@ Logging, tracing and metrics helpers are under `src/server/observability`. They 
 - [createPulse](./src/server/observability/pulse/index.js) - creates the hapi-pulse graceful-shutdown registration object (10s timeout by default)
 - [createMetricsCounter](./src/server/observability/metrics/index.js) - creates an AWS embedded-metrics counter with a per-call enabled gate (boolean or thunk). Metric failures are logged and swallowed (metrics must never break the app); pass a `logger` for visibility — with none, failures are swallowed silently, so make that a conscious choice per repo
 
+## Service clients
+
+Service-to-service client helpers are under `src/server/service-clients`. They are plain functions taking resolved config values — the library never reads repo config:
+
+- [buildServiceHeaders](./src/server/service-clients/service-headers/index.js) - builds the trace + service-key headers for a service-to-service call (replaces six hand-rolled copies across the three repos); pass a custom `serviceKeyHeaderName` for non-`x-api-key` headers such as the impact assessor's `x-data-sync-token`
+- [getRequestFromService](./src/server/service-clients/service-request/index.js) - the shared GET core of the nrf-backend clients (Wreck get with json, logging and rethrowing with a caller-supplied message); the frontend's POST/PATCH support and the admin DELETE stay repo-local
+- [wreckErrorContext](./src/server/service-clients/wreck-error-context/index.js) - unwraps `statusCode` / `responsePayload` from a Wreck error for catch-block logging; callers keep their own message templates
+- [serviceBaseUrl](./src/server/service-clients/service-base-url/index.js) - resolves a CDP service base URL: explicit config, else the CDP internal domain derived from `ENVIRONMENT`, else a local-dev default
+
 ## Validation schemas
 
 Shared Joi schemas and patterns are under `src/server/validation`:
