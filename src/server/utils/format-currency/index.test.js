@@ -15,7 +15,9 @@ describe('#formatCurrency', () => {
 
   describe('With currency attributes', () => {
     it('should be in the provided format', () => {
-      expect(formatCurrency('5500000', 'en-US', 'USD')).toBe('$5,500,000.00')
+      expect(
+        formatCurrency('5500000', { locale: 'en-US', currency: 'USD' })
+      ).toBe('$5,500,000.00')
     })
   })
 
@@ -34,11 +36,17 @@ describe('#formatCurrency', () => {
       ],
       ['keeps both decimals when rounding gives pence', 100.006, '£100.01']
     ])('should %s', (_, value, expected) => {
-      expect(formatCurrency(value, 'en-GB', 'GBP', true)).toBe(expected)
+      expect(formatCurrency(value, { hideZeroPence: true })).toBe(expected)
     })
 
     it('should omit .00 in the provided format', () => {
-      expect(formatCurrency('5500000', 'en-US', 'USD', true)).toBe('$5,500,000')
+      expect(
+        formatCurrency('5500000', {
+          locale: 'en-US',
+          currency: 'USD',
+          hideZeroPence: true
+        })
+      ).toBe('$5,500,000')
     })
   })
 })
