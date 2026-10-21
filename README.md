@@ -9,7 +9,7 @@ Shared library for NRF projects, installable directly from GitHub.
 
 - [retryAsyncOperation](./src/server/utils/retry-async-operation/index.js) - a wrapper function to retry any async operation with configurable interval / retry count
 - [formatCurrencyPrecise](./src/server/utils/format-currency-precise/index.js) - formats a currency value with up to four decimal places, for levy figures that need more precision than whole pence
-- [formatCurrency](./src/server/utils/format-currency/index.js) - formats a currency value with two decimal places (sits beside `formatCurrencyPrecise`; registered as a Nunjucks filter by nrf-frontend and nrf-admin-frontend)
+- [formatCurrency](./src/server/utils/format-currency/index.js) - formats a currency value with two decimal places (sits beside `formatCurrencyPrecise`; registered as a Nunjucks filter by nrf-frontend and nrf-admin-frontend). Takes an options object (`locale`, `currency`, `hideZeroPence`); set `hideZeroPence: true` to drop the pence from whole-pound amounts (£21,650 rather than £21,650.00)
 - [formatDate](./src/server/utils/format-date/index.js) - formats a date with date-fns, defaulting to the GOV.UK-style `'EEE do MMMM yyyy'`
 - [getGitHash](./src/server/utils/git-hash/index.js) - resolves the deployed git hash from the `GIT_HASH` env var or the `.git-hash` file written by CI
 
