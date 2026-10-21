@@ -18,4 +18,27 @@ describe('#formatCurrency', () => {
       expect(formatCurrency('5500000', 'en-US', 'USD')).toBe('$5,500,000.00')
     })
   })
+
+  describe('With hideZeroPence', () => {
+    it.each([
+      ['omits .00 for a whole number', 21650, '£21,650'],
+      ['omits .00 for a numeric string with .00', '21650.00', '£21,650'],
+      ['omits .00 for zero', 0, '£0'],
+      ['omits .00 for a large whole number', 1234567, '£1,234,567'],
+      ['keeps both decimals for whole pence', 21650.5, '£21,650.50'],
+      ['keeps both decimals for 1p', 0.01, '£0.01'],
+      [
+        'treats an amount that rounds to whole pounds as whole',
+        100.004,
+        '£100'
+      ],
+      ['keeps both decimals when rounding gives pence', 100.006, '£100.01']
+    ])('should %s', (_, value, expected) => {
+      expect(formatCurrency(value, 'en-GB', 'GBP', true)).toBe(expected)
+    })
+
+    it('should omit .00 in the provided format', () => {
+      expect(formatCurrency('5500000', 'en-US', 'USD', true)).toBe('$5,500,000')
+    })
+  })
 })
