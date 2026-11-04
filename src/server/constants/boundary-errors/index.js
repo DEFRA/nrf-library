@@ -21,6 +21,7 @@ export const BOUNDARY_ERRORS = {
     UPLOAD_FILE_MISSING: 'upload_file_missing',
     UPLOAD_STATUS_CHECK_FAILED: 'upload_status_check_failed',
     S3_DOWNLOAD_FAILED: 's3_download_failed',
+    FILENAME_MISSING: 'filename_missing',
     UNSAFE_FILENAME: 'unsafe_filename',
     INVALID_ZIP: 'invalid_zip',
     ZIP_TOO_MANY_FILES: 'zip_too_many_files',
