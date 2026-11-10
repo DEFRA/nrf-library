@@ -12,6 +12,7 @@ describe('statusCodes', () => {
       unauthorized: 401,
       forbidden: 403,
       notFound: 404,
+      conflict: 409,
       payloadTooLarge: 413,
       imATeapot: 418,
       tooManyRequests: 429,

@@ -1,6 +1,6 @@
 {
   "name": "@defra/nrf-library",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "Shared library for NRF projects.",
   "type": "module",
   "main": "index.js",
@@ -48,7 +48,10 @@
     "date-fns": "^4.4.0",
     "hapi-pino": "^13.0.0",
     "hapi-pulse": "^4.0.0",
-    "joi": "^18.2.9",
+    "joi": "^18.3.2",
     "pino": "^10.4.0"
+  },
+  "overrides": {
+    "joi": "^18.3.2"
   }
 }
