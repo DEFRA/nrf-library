@@ -288,4 +288,55 @@ describe('quotePatchSchema', () => {
       expect(error).toBeDefined()
     })
   })
+
+  describe('levyGbp calculation history fields', () => {
+    const history = {
+      calculationDate: '2026-09-14T10:30:15Z',
+      baseChargePerUnit: 2675,
+      units: 10,
+      levyChargeId: 41,
+      edpStartDate: '2026-01-01',
+      edpStartYearIndexId: null,
+      edpStartYearIndexFactor: null,
+      calculationYearIndexId: null,
+      calculationYearIndexFactor: null
+    }
+    const validateWith = (fields) =>
+      validate({
+        edps: [{ ...validEdp, levyGbp: { ...validEdp.levyGbp, ...fields } }]
+      })
+
+    it('accepts every field when no inflation applied', () => {
+      expect(validateWith(history).error).toBeUndefined()
+    })
+
+    it('accepts every field with the inflation indices applied', () => {
+      const { error } = validateWith({
+        ...history,
+        edpStartYearIndexId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+        edpStartYearIndexFactor: 1,
+        calculationYearIndexId: '0b9d0d1e-3f6a-4f4e-9d36-1c2d6f5a8b10',
+        calculationYearIndexFactor: 1.0512
+      })
+
+      expect(error).toBeUndefined()
+    })
+
+    it('accepts a payload without them while the impact assessor rolls them out', () => {
+      expect(validate(validPayload).error).toBeUndefined()
+    })
+
+    it.each([
+      ['calculationDate', 'yesterday'],
+      ['baseChargePerUnit', 0],
+      ['units', 0],
+      ['units', 2147483648],
+      ['levyChargeId', 1.5],
+      ['edpStartDate', '2026-01-01T00:00:00Z'],
+      ['edpStartYearIndexId', 'not-a-uuid'],
+      ['calculationYearIndexFactor', 0]
+    ])('rejects %s of %s', (field, value) => {
+      expect(validateWith({ ...history, [field]: value }).error).toBeDefined()
+    })
+  })
 })

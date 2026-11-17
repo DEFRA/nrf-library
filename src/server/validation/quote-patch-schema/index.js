@@ -9,6 +9,14 @@ const currencySchema = joi.number().precision(2).min(0).required()
 
 const bandSchema = joi.number().integer().min(1).max(4).required()
 
+const MAX_INTEGER = 2147483647
+
+const dateSchema = joi.string().pattern(/^\d{4}-\d{2}-\d{2}$/)
+
+const indexIdSchema = joi.string().guid().allow(null)
+
+const indexFactorSchema = joi.number().precision(4).positive().allow(null)
+
 const catchmentSchema = joi.object({
   label: joi.string().required(),
   catchmentId: joi.string().required().allow(null),
@@ -46,7 +54,19 @@ export const quotePatchSchema = joi.object({
             amountExcludingVat: currencySchema,
             amountInflationAdjusted: currencySchema,
             baseAmount: currencySchema,
-            modelVersion: joi.number().integer().min(1).required()
+            modelVersion: joi.number().integer().min(1).required(),
+            // The calculation history fields are optional while the impact
+            // assessor rolls out sending them; make them required once every
+            // callback does. The index fields are null when no inflation applied.
+            calculationDate: joi.date().iso(),
+            baseChargePerUnit: joi.number().precision(2).positive(),
+            units: joi.number().integer().min(1).max(MAX_INTEGER),
+            levyChargeId: joi.number().integer().min(1).max(MAX_INTEGER),
+            edpStartDate: dateSchema,
+            edpStartYearIndexId: indexIdSchema,
+            edpStartYearIndexFactor: indexFactorSchema,
+            calculationYearIndexId: indexIdSchema,
+            calculationYearIndexFactor: indexFactorSchema
           })
           .required()
       })

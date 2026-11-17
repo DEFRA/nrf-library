@@ -1,6 +1,6 @@
 {
   "name": "@defra/nrf-library",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "description": "Shared library for NRF projects.",
   "type": "module",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "lint": "npm run lint:js",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "git:pre-commit-hook": "npm audit --audit-level=high && npm run format:check && npm run lint && npm run test",
+    "git:pre-commit-hook": "npm audit --omit=dev --audit-level=high && npm run format:check && npm run lint && npm run test",
     "prepare": "husky"
   },
   "repository": {
